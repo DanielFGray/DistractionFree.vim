@@ -3,13 +3,13 @@
 
 Distraction-free editing in vim
 
-Drawing inspiration from [https://github.com/junegunn/goyo.vim](Goyo.vim) and [https://github.com/bilalq/lite-dfm](litedfm), I decided to try my hand at making my own but without any of the margins or padding around buffers.
+Drawing inspiration from [Goyo.vim](https://github.com/junegunn/goyo.vim) and [litedfm](https://github.com/bilalq/lite-dfm), I decided to try my hand at making my own but without any of the margins or padding around buffers.
 
 #Installation
 
 Installation is done as usual, with your plugin manager of choice.
 
-If you don't have one already, I suggest [https://github.com/junegunn/vim-plug](vim-plug).
+If you don't have one already, I suggest [vim-plug](https://github.com/junegunn/vim-plug).
 
 #Customization
 
