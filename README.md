@@ -1,5 +1,4 @@
 #DistractionFree.vim
-===================
 
 Distraction-free editing in vim
 
