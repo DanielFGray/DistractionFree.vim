@@ -14,7 +14,7 @@ function! s:DistractionsOff()
 		\ 'limelight':      exists(':Limelight'),
 		\ 'signify':        exists('b:sy') && b:sy.active,
 		\ 'fullscreen':     has('fullscreen') && &fullscreen,
-		\ 'tmux':           get(g:, 'distraction_free#toggle_tmux', 0)
+		\ 'tmux':           exists('$TMUX') && get(g:, 'distraction_free#toggle_tmux', 0)
 		\ }
 	if has('gui_running')
 		let s:distractionSettings['fullscreen'] = has('fullscreen') && &fullscreen
@@ -41,7 +41,7 @@ function! s:DistractionsOff()
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterDisable
 	endif
-	if exists('$TMUX') && s:distractionSettings['tmux']
+	if s:distractionSettings['tmux']
 		silent! !tmux set -q status off
 	endif
 	if has('fullscreen')
@@ -98,7 +98,7 @@ function! s:DistractionsOn()
 	elseif exists('#LightLine')
 		silent! call lightline#enable()
 	endif
-	if exists('$TMUX') && s:distractionSettings['tmux']
+	if s:distractionSettings['tmux']
 		silent! !tmux set -q status on
 	endif
 	if has('gui_running') && has('fullscreen')
