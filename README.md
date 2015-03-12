@@ -2,6 +2,8 @@
 
 Distraction-free editing in vim
 
+![screenshot](https://raw.githubusercontent.com/DanielFGray/DistractionFree.vim/master/screencast.gif)
+
 Drawing inspiration from [Goyo.vim](https://github.com/junegunn/goyo.vim) and [litedfm](https://github.com/bilalq/lite-dfm), I decided to try my hand at making my own but without any of the margins or padding around buffers.
 
 #Installation
