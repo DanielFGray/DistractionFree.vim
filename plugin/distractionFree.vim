@@ -1,95 +1,73 @@
-function! s:DistractionsOff()
-	let g:distractionFree = 1
-	let s:distractionSettings = {
-		\ 'cursorline':     &cursorline,
-		\ 'cursorcolumn':   &cursorcolumn,
-		\ 'colorcolumn':    &colorcolumn,
-		\ 'number':         &number,
-		\ 'relativenumber': &relativenumber,
-		\ 'list':           &list,
-		\ 'ruler':          &ruler,
-		\ 'showtabline':    &showtabline,
-		\ 'laststatus':     &laststatus,
-		\ 'gitgutter':      get(g:, 'gitgutter_enabled', 0),
-		\ 'limelight':      exists(':Limelight') && get(g:, 'distraction_free#toggle_limelight', 0),
-		\ 'signify':        exists('b:sy') && b:sy.active,
-		\ 'fullscreen':     has('fullscreen') && &fullscreen,
-		\ 'tmux':           exists('$TMUX') && get(g:, 'distraction_free#toggle_tmux', 0)
-		\ }
-	if has('gui_running')
-		let s:distractionSettings['fullscreen'] = has('fullscreen') && &fullscreen
-	endif
-	bufdo set nocursorline
-		\ nocursorcolumn
-		\ colorcolumn=
-		\ nonumber
-		\ norelativenumber
-		\ nolist
-	windo set nocursorline
-		\ nocursorcolumn
-		\ colorcolumn=
-		\ nonumber
-		\ norelativenumber
-		\ nolist
-	set noruler showtabline=0 laststatus=0
-	if s:distractionSettings['limelight']
-		silent! Limelight
+let s:distractionSettings = {}
+if empty(get(g:, 'distraction_free#toggle_options', {}))
+	let g:distraction_free#toggle_options = [
+		\ 'cursorline',
+		\ 'colorcolumn',
+		\ 'cursorcolumn',
+		\ 'number',
+		\ 'relativenumber',
+		\ 'list',
+		\ 'ruler',
+		\ 'showtabline',
+		\ 'laststatus',
+	\]
+endif
+
+function! s:DistractionsOff() abort
+	let s:distractionFree = 1
+	let s:distractionSettings['gitgutter']  = get(g:, 'gitgutter_enabled', 0)
+	let s:distractionSettings['signify']    = exists('b:sy') && b:sy.active
+	let s:distractionSettings['limelight']  = exists(':Limelight') && get(g:, 'distraction_free#toggle_limelight', 0)
+	let s:distractionSettings['tmux']       = exists('$TMUX') && get(g:, 'distraction_free#toggle_tmux', 0)
+	let s:distractionSettings['fullscreen'] = has('fullscreen') && &fullscreen
+	for setting in g:distraction_free#toggle_options
+		execute printf('let s:distractionSettings[%s] = &%s | windo bufdo let &%s=0', string(setting), setting, setting)
+	endfor
+	if s:distractionSettings['gitgutter']
+		silent! GitGutterDisable
 	endif
 	if s:distractionSettings['signify']
 		silent! SignifyToggle
 	endif
-	if s:distractionSettings['gitgutter']
-		silent! GitGutterDisable
+	if s:distractionSettings['limelight']
+		silent! Limelight
 	endif
 	if s:distractionSettings['tmux']
 		silent! !tmux set -q status off
 	endif
-	if has('fullscreen')
-		set fullscreen
+	if has('gui_running')
+		let s:distractionSettings['guioptions'] = &guioptions
+		set guioptions-=T
+		set guioptions-=r
+		set guioptions-=L
+		if has('fullscreen')
+			set fullscreen
+		endif
 	endif
 endfunction
 
-function! s:DistractionsOn()
-	let g:distractionFree = 0
-	bufdo let [&cursorline,
-		\ &cursorcolumn,
-		\ &colorcolumn,
-		\ &number,
-		\ &relativenumber,
-		\ &list]
-		\ = [s:distractionSettings['cursorline'],
-		\ s:distractionSettings['cursorcolumn'],
-		\ s:distractionSettings['colorcolumn'],
-		\ s:distractionSettings['number'],
-		\ s:distractionSettings['relativenumber'],
-		\ s:distractionSettings['list']]
-	windo let [&cursorline,
-		\ &cursorcolumn,
-		\ &colorcolumn,
-		\ &number,
-		\ &relativenumber,
-		\ &list]
-		\ = [s:distractionSettings['cursorline'],
-		\ s:distractionSettings['cursorcolumn'],
-		\ s:distractionSettings['colorcolumn'],
-		\ s:distractionSettings['number'],
-		\ s:distractionSettings['relativenumber'],
-		\ s:distractionSettings['list']]
-	let [&ruler,
-		\ &showtabline,
-		\ &laststatus]
-		\ = [s:distractionSettings['ruler'],
-		\ s:distractionSettings['showtabline'],
-		\ s:distractionSettings['laststatus']]
-	if s:distractionSettings['limelight']
-		silent! Limelight!
-	endif
+function! s:DistractionsOn() abort
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterEnable
 	endif
 	if s:distractionSettings['signify']
 		silent! SignifyToggle
 	endif
+	if s:distractionSettings['limelight']
+		silent! Limelight!
+	endif
+	if s:distractionSettings['tmux']
+		silent! !tmux set -q status on
+	endif
+	if has('gui_running')
+		let &guioptions = s:distractionSettings['guioptions']
+		if s:distractionSettings['fullscreen']
+			let &fullscreen = s:distractionSettings['fullscreen']
+		endif
+	endif
+	for setting in g:distraction_free#toggle_options
+		execute printf("let &%s = s:distractionSettings[%s]", setting, string(setting))
+	endfor
 	if exists(':AirLineRefresh')
 		silent! AirlineRefresh
 	elseif exists('#Powerline')
@@ -98,23 +76,18 @@ function! s:DistractionsOn()
 	elseif exists('#LightLine')
 		silent! call lightline#enable()
 	endif
-	if s:distractionSettings['tmux']
-		silent! !tmux set -q status on
-	endif
-	if has('gui_running') && has('fullscreen')
-		let &fullscreen = s:distractionSettings['fullscreen']
-	endif
+	let s:distractionFree = 0
 endfunction
 
-function! s:ToggleDistractions()
-	let currBuff = bufnr("%")
-	if !exists('g:distractionFree') || !g:distractionFree
+function! s:ToggleDistractions() abort
+	if !exists('s:distractionFree') || !s:distractionFree
 		call s:DistractionsOff()
 	else
 		call s:DistractionsOn()
 	endif
-	execute 'buffer ' . currBuff
 	silent! redraw!
 endfunction
 
-command! -nargs=0 ToggleDistractions call <SID>ToggleDistractions()
+command! -nargs=0 DistractionsToggle call <SID>ToggleDistractions()
+command! -nargs=0 DistractionsOn call <SID>DistractionsOn()
+command! -nargs=0 DistractionsOff call <SID>DistractionsOff()
