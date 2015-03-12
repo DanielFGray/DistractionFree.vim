@@ -39,3 +39,9 @@ You can enable toggling of Limelight (show in screencast above):
 You can also toggle the tmux status bar:
 
     let g:distraction_free#toggle_tmux = 1
+
+##todo
+
+This is still a work in progress. The biggest hitch right now is that it does not work with splits.
+
+I am, of course, open to pull requests :)
