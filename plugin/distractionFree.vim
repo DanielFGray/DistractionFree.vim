@@ -21,7 +21,7 @@ function! s:DistractionsOff() abort
 	let s:distractionSettings['tmux']       = exists('$TMUX') && get(g:, 'distraction_free#toggle_tmux', 0)
 	let s:distractionSettings['fullscreen'] = has('fullscreen') && &fullscreen
 	for setting in g:distraction_free#toggle_options
-		execute printf('let s:distractionSettings[%s] = &%s | windo bufdo let &%s=0', string(setting), setting, setting)
+		execute printf('let s:distractionSettings[%s] = &%s | bufdo let &%s=0', string(setting), setting, setting)
 	endfor
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterDisable
@@ -47,6 +47,9 @@ function! s:DistractionsOff() abort
 endfunction
 
 function! s:DistractionsOn() abort
+	for setting in g:distraction_free#toggle_options
+		execute printf("bufdo let &%s = s:distractionSettings[%s]", setting, string(setting))
+	endfor
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterEnable
 	endif
@@ -65,9 +68,6 @@ function! s:DistractionsOn() abort
 			let &fullscreen = s:distractionSettings['fullscreen']
 		endif
 	endif
-	for setting in g:distraction_free#toggle_options
-		execute printf("let &%s = s:distractionSettings[%s]", setting, string(setting))
-	endfor
 	if exists(':AirLineRefresh')
 		silent! AirlineRefresh
 	elseif exists('#Powerline')
