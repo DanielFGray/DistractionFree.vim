@@ -11,7 +11,7 @@ function! s:DistractionsOff()
 		\ 'showtabline':    &showtabline,
 		\ 'laststatus':     &laststatus,
 		\ 'gitgutter':      get(g:, 'gitgutter_enabled', 0),
-		\ 'limelight':      exists(':Limelight'),
+		\ 'limelight':      exists(':Limelight') && get(g:, 'distraction_free#toggle_limelight', 0),
 		\ 'signify':        exists('b:sy') && b:sy.active,
 		\ 'fullscreen':     has('fullscreen') && &fullscreen,
 		\ 'tmux':           exists('$TMUX') && get(g:, 'distraction_free#toggle_tmux', 0)

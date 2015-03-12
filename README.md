@@ -21,3 +21,7 @@ This plugin exposes a single command to toggle between modes `:ToggleDistraction
 I've included an option to toggle your tmux status bar when running in a tmux session:
 
     let g:distraction_free#toggle_tmux = 1
+
+You can also enable toggling of Limelight (show in screencast above):
+
+    let g:distraction_free#toggle_limelight = 1
