@@ -1,17 +1,29 @@
 let s:distractionSettings = {}
-if !get(g:, 'distraction_free#toggle_options', 0)
-	let g:distraction_free#toggle_options = [
-		\ 'cursorline',
-		\ 'colorcolumn',
-		\ 'cursorcolumn',
-		\ 'number',
-		\ 'relativenumber',
-		\ 'list',
-		\ 'ruler',
-		\ 'showtabline',
-		\ 'laststatus',
-	\]
-endif
+let g:distraction_free#toggle_options = [
+	\ 'cursorline',
+	\ 'colorcolumn',
+	\ 'cursorcolumn',
+	\ 'number',
+	\ 'relativenumber',
+	\ 'list',
+	\ 'ruler',
+	\ 'showtabline',
+	\ 'laststatus',
+\]
+
+function! s:DoAllWindows(command) abort
+	let currwin=winnr()
+	let currBuff=bufnr("%")
+	let currTab=tabpagenr()
+	let curaltwin=winnr('#')
+	execute 'bufdo ' . a:command
+	execute 'buffer ' . currBuff
+	execute 'windo ' . a:command
+	execute curaltwin . 'wincmd w'
+	execute currwin . 'wincmd w'
+	execute 'tabdo ' . a:command
+	execute 'tabn ' . currTab
+endfunction
 
 function! s:DistractionsOff() abort
 	let s:distractionFree = 1
@@ -20,9 +32,16 @@ function! s:DistractionsOff() abort
 	let s:distractionSettings['limelight']  = exists(':Limelight') && get(g:, 'distraction_free#toggle_limelight', 0)
 	let s:distractionSettings['tmux']       = exists('$TMUX') && get(g:, 'distraction_free#toggle_tmux', 0)
 	let s:distractionSettings['fullscreen'] = has('fullscreen') && &fullscreen
+	let [k, v, zero] = [[], [], []]
 	for setting in g:distraction_free#toggle_options
-		execute printf('let s:distractionSettings[%s] = &%s | bufdo let &%s=0', string(setting), setting, setting)
+		let k = add(k, printf('&%s', setting))
+		let v = add(v, printf('s:distractionSettings[%s]', string(setting)))
+		let zero = add(zero, 0)
 	endfor
+	execute 'let ['.join(v, ', ').'] = ['. join(k, ', ') .']'
+	let dostr = 'let ['. join(k, ', ') .'] = ['. join(zero, ', ') .']'
+	call s:DoAllWindows(dostr)
+	unlet k v dostr
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterDisable
 	endif
@@ -48,9 +67,14 @@ endfunction
 
 function! s:DistractionsOn() abort
 	let s:distractionFree = 0
+	let [k, v] = [[], []]
 	for setting in g:distraction_free#toggle_options
-		execute printf("bufdo let &%s = s:distractionSettings[%s]", setting, string(setting))
+		let k = add(k, printf('&%s', setting))
+		let v = add(v, printf('s:distractionSettings[%s]', string(setting)))
 	endfor
+	let dostr = 'let ['.join(k, ', ').'] = ['. join(v, ', ') .']'
+	call s:DoAllWindows(dostr)
+	unlet k v dostr
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterEnable
 	endif
