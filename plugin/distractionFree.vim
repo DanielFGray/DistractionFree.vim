@@ -1,5 +1,5 @@
 let s:distractionSettings = {}
-if empty(get(g:, 'distraction_free#toggle_options', {}))
+if !get(g:, 'distraction_free#toggle_options', 0)
 	let g:distraction_free#toggle_options = [
 		\ 'cursorline',
 		\ 'colorcolumn',
