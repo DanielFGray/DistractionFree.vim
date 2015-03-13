@@ -32,16 +32,16 @@ function! s:DistractionsOff() abort
 	let s:distractionSettings['limelight']  = exists(':Limelight') && get(g:, 'distraction_free#toggle_limelight', 0)
 	let s:distractionSettings['tmux']       = exists('$TMUX') && get(g:, 'distraction_free#toggle_tmux', 0)
 	let s:distractionSettings['fullscreen'] = has('fullscreen') && &fullscreen
-	let [k, v, zero] = [[], [], []]
+	let [k, v, z] = [[], [], []]
 	for setting in g:distraction_free#toggle_options
 		let k = add(k, printf('&%s', setting))
 		let v = add(v, printf('s:distractionSettings[%s]', string(setting)))
-		let zero = add(zero, 0)
+		let z = add(z, 0)
 	endfor
 	execute 'let ['.join(v, ', ').'] = ['. join(k, ', ') .']'
-	let dostr = 'let ['. join(k, ', ') .'] = ['. join(zero, ', ') .']'
+	let dostr = 'let ['. join(k, ', ') .'] = ['. join(z, ', ') .']'
 	call s:DoAllWindows(dostr)
-	unlet k v dostr
+	unlet k v z dostr
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterDisable
 	endif
