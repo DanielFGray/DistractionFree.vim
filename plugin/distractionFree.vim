@@ -47,6 +47,7 @@ function! s:DistractionsOff() abort
 endfunction
 
 function! s:DistractionsOn() abort
+	let s:distractionFree = 0
 	for setting in g:distraction_free#toggle_options
 		execute printf("bufdo let &%s = s:distractionSettings[%s]", setting, string(setting))
 	endfor
@@ -76,7 +77,6 @@ function! s:DistractionsOn() abort
 	elseif exists('#LightLine')
 		silent! call lightline#enable()
 	endif
-	let s:distractionFree = 0
 endfunction
 
 function! s:ToggleDistractions() abort
