@@ -42,10 +42,10 @@ function! s:DistractionsOff() abort
 	call s:DoAllWindows('let ['. join(k, ', ') .'] = ['. join(z, ', ') .']')
 	unlet k v z
 	if s:distractionSettings['gitgutter']
-		silent! GitGutterDisable
+		call s:DoAllWindows('GitGutterDisable')
 	endif
 	if s:distractionSettings['signify']
-		silent! SignifyToggle
+		call s:DoAllWindows('SignifyToggle')
 	endif
 	if s:distractionSettings['limelight']
 		silent! Limelight
