@@ -39,9 +39,8 @@ function! s:DistractionsOff() abort
 		let z = add(z, 0)
 	endfor
 	execute 'let ['.join(v, ', ').'] = ['. join(k, ', ') .']'
-	let dostr = 'let ['. join(k, ', ') .'] = ['. join(z, ', ') .']'
-	call s:DoAllWindows(dostr)
-	unlet k v z dostr
+	call s:DoAllWindows('let ['. join(k, ', ') .'] = ['. join(z, ', ') .']')
+	unlet k v z
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterDisable
 	endif
@@ -72,9 +71,8 @@ function! s:DistractionsOn() abort
 		let k = add(k, printf('&%s', setting))
 		let v = add(v, printf('s:distractionSettings[%s]', string(setting)))
 	endfor
-	let dostr = 'let ['.join(k, ', ').'] = ['. join(v, ', ') .']'
-	call s:DoAllWindows(dostr)
-	unlet k v dostr
+	call s:DoAllWindows('let ['.join(k, ', ').'] = ['. join(v, ', ') .']')
+	unlet k v
 	if s:distractionSettings['gitgutter']
 		silent! GitGutterEnable
 	endif
