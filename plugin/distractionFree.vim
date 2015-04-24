@@ -62,6 +62,10 @@ function! s:DistractionsOff() abort
 			set fullscreen
 		endif
 	endif
+	augroup Distractions
+		autocmd!
+		autocmd VimLeavePre * | if s:distractionSettings['tmux'] | silent! !tmux set -q status on | endif
+	augroup END
 endfunction
 
 function! s:DistractionsOn() abort
@@ -99,6 +103,9 @@ function! s:DistractionsOn() abort
 	elseif exists('#LightLine')
 		silent! call lightline#enable()
 	endif
+	augroup Distractions
+		autocmd!
+	augroup END
 endfunction
 
 function! s:ToggleDistractions() abort
