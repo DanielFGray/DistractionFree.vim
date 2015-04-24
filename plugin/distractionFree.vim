@@ -110,6 +110,6 @@ function! s:ToggleDistractions() abort
 	silent! redraw!
 endfunction
 
-command! -nargs=0 DistractionsToggle call <SID>ToggleDistractions()
-command! -nargs=0 DistractionsOn call <SID>DistractionsOn()
-command! -nargs=0 DistractionsOff call <SID>DistractionsOff()
+command! -bar -nargs=0 DistractionsToggle call <SID>ToggleDistractions()
+command! -bar -nargs=0 DistractionsOn call <SID>DistractionsOn()
+command! -bar -nargs=0 DistractionsOff call <SID>DistractionsOff()
