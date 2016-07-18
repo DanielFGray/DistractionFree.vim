@@ -71,6 +71,9 @@ function! s:DistractionsOff() abort
 		autocmd!
 		autocmd VimLeavePre * | if s:distractionSettings['tmux'] | silent! !tmux set -q status on | endif
 	augroup END
+	if exists('#User#DistractionsOff')
+		doautocmd User DistractionsOff
+	endif
 endfunction
 
 function! s:DistractionsOn() abort
@@ -111,10 +114,13 @@ function! s:DistractionsOn() abort
 	augroup Distractions
 		autocmd!
 	augroup END
+	if exists('#User#DistractionsOff')
+		doautocmd User DistractionsOff
+	endif
 endfunction
 
 function! s:ToggleDistractions() abort
-	if !exists('s:distractionFree') || !s:distractionFree
+	if ! exists('s:distractionFree') || !s:distractionFree
 		call s:DistractionsOff()
 	else
 		call s:DistractionsOn()
