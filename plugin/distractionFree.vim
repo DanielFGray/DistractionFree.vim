@@ -1,4 +1,7 @@
-let s:distractionSettings = {}
+if ! exists('s:distractionSettings')
+	let s:distractionSettings = {}
+endif
+
 if ! exists('g:distraction_free#toggle_options')
 	let g:distraction_free#toggle_options = [
 		\ 'cursorline',
