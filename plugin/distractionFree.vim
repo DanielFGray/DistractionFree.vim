@@ -1,15 +1,17 @@
 let s:distractionSettings = {}
-let g:distraction_free#toggle_options = [
-	\ 'cursorline',
-	\ 'colorcolumn',
-	\ 'cursorcolumn',
-	\ 'number',
-	\ 'relativenumber',
-	\ 'list',
-	\ 'ruler',
-	\ 'showtabline',
-	\ 'laststatus',
-\]
+if ! exists('g:distraction_free#toggle_options')
+	let g:distraction_free#toggle_options = [
+		\ 'cursorline',
+		\ 'colorcolumn',
+		\ 'cursorcolumn',
+		\ 'number',
+		\ 'relativenumber',
+		\ 'list',
+		\ 'ruler',
+		\ 'showtabline',
+		\ 'laststatus',
+		\]
+endif
 
 function! s:DoAllWindows(command) abort
 	let currwin=winnr()
