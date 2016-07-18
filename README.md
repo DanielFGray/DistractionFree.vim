@@ -20,6 +20,7 @@ This plugin exposes a couple of commands to switch between modes: `:Distractions
 
 ``` vim
     nnoremap <Leader>df <Esc>:DistractionsToggle<CR>
+```
 
 You can define the list of settings you want toggled (shown is the default):
 
