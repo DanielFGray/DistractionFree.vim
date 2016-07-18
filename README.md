@@ -19,7 +19,7 @@ If you don't have one already, I suggest [vim-plug](https://github.com/junegunn/
 This plugin exposes a couple of commands to switch between modes: `:DistractionsOn`, `:DistractionsOff`, and `:DistractionsToggle`. There aren't any mappings defined, you must add your own. I use the following:
 
 ``` vim
-    nnoremap <Leader>df <Esc>:DistractionsToggle<CR>
+nnoremap <Leader>df <Esc>:DistractionsToggle<CR>
 ```
 
 You can define the list of settings you want toggled (shown is the default):
