@@ -54,10 +54,10 @@ You can also define autocmds to be fired when entering or leaving DistractionFre
 
 ``` vim
 function! s:distractions_off()
-  set showmode showcmd ruler
+  set showmode showcmd
 endfunction
 function! s:distractions_on()
-  set noshowmode noshowcmd noruler
+  set noshowmode noshowcmd
 endfunction
 autocmd! User DistractionsOn nested call <SID>distractions_on()
 autocmd! User DistractionsOff nested call <SID>distractions_off()
