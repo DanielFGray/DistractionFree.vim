@@ -1,4 +1,4 @@
-#DistractionFree.vim
+# DistractionFree.vim
 
 Distraction-free editing in vim
 
@@ -8,13 +8,13 @@ The idea behind this plugin is to disable some of the fancier plugins or setting
 
 Drawing inspiration from [Goyo.vim](https://github.com/junegunn/goyo.vim) and [litedfm](https://github.com/bilalq/lite-dfm), I decided to try my hand at making my own but with a user definable list of settings to toggle, and without any of the margins or padding around buffers.
 
-#Installation
+# Installation
 
 Installation is done as usual, with your plugin manager of choice.
 
 If you don't have one already, I suggest [vim-plug](https://github.com/junegunn/vim-plug).
 
-#Customization
+# Customization
 
 This plugin exposes a couple of commands to switch between modes: `:DistractionsOn`, `:DistractionsOff`, and `:DistractionsToggle`. There aren't any mappings defined, you must add your own. I use the following:
 
